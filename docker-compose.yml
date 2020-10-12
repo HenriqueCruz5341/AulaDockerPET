@@ -3,13 +3,13 @@ version: "3.1"
 services:
   mongodb:
     image: mongo:4.0.4
-    container_name: db-apipet
+    container_name: db-auladocker
     restart: always
     ports:
       - 27017:27017
       - 28017:28017
     volumes:
-      - data-db-mongo:/data/db
+      - ./database:/data/db
 
   nodejs:
     build: .
@@ -19,6 +19,8 @@ services:
     restart: always
     depends_on:
       - mongodb
+    environment:
+      - DB_CONNECT=mongodb://mongodb:27017/mydb
     volumes:
       - ./backend:/usr/app
 
@@ -33,6 +35,3 @@ services:
       - ./nginx-conf:/etc/nginx/conf.d
     depends_on:
       - nodejs
-
-volumes:
-  data-db-mongo:
